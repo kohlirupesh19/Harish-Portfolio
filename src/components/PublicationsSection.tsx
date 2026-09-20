@@ -1,17 +1,15 @@
 import { useState, useMemo } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import { PUBLICATIONS } from '../data/professorData';
-import { Publication, ResearchDomain, PublicationType } from '../types';
+import { Publication, ResearchDomain } from '../types';
 import { 
   Search, 
-  Filter, 
   ExternalLink, 
-  FileCode, 
   Quote, 
   ChevronDown, 
   ChevronUp, 
   Check, 
-  X,
-  BookMarked,
+  X, 
   Sparkles
 } from 'lucide-react';
 
@@ -89,18 +87,24 @@ export function PublicationsSection({ selectedDomain, onSelectDomain }: Publicat
   };
 
   return (
-    <section id="publications" className="py-14 sm:py-16 border-b border-[#E3E3DC] bg-[#FBFBF9]">
+    <section id="publications" className="py-12 sm:py-16 border-b border-[#E3E3DC] bg-[#FBFBF9] overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+        <motion.div
+          initial={{ opacity: 0, y: 14 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+          className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4"
+        >
           <div>
             <div className="text-xs uppercase tracking-widest font-semibold text-[#0F2942]">
               Scholarly Contributions
             </div>
-            <h2 className="font-serif-academic text-2xl sm:text-3xl lg:text-4xl text-[#0F2942] mt-1">
+            <h2 className="font-serif-academic text-2xl sm:text-3xl lg:text-4xl text-[#0F2942] mt-1 text-break-academic">
               Peer-Reviewed Publications & Proceedings
             </h2>
-            <p className="mt-2 text-sm text-[#52525B] max-w-2xl">
+            <p className="mt-2 text-sm text-[#52525B] max-w-2xl leading-relaxed">
               Research publications across international peer-reviewed journals, IEEE and Springer conferences, and indexed academic symposiums.
             </p>
           </div>
@@ -111,7 +115,7 @@ export function PublicationsSection({ selectedDomain, onSelectDomain }: Publicat
             <span className="font-semibold text-[#0F2942]">{PUBLICATIONS.length}</span>
             <span>works indexed</span>
           </div>
-        </div>
+        </motion.div>
 
         {/* Search & Filters Bar */}
         <div className="bg-white rounded-lg border border-[#E2E8F0] p-4 sm:p-5 shadow-2xs mb-8 space-y-4">
@@ -124,12 +128,13 @@ export function PublicationsSection({ selectedDomain, onSelectDomain }: Publicat
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search by paper title, author, keyword, or journal name..."
-              className="w-full pl-10 pr-4 py-2 text-sm bg-[#F8FAFC] border border-[#CBD5E1] rounded-md focus:outline-hidden focus:border-[#0F2942] focus:ring-1 focus:ring-[#0F2942] transition-colors"
+              className="w-full pl-10 pr-10 py-2.5 text-sm bg-[#F8FAFC] border border-[#CBD5E1] rounded-md focus-visible:outline-2 focus-visible:outline-[#0F2942] focus:bg-white transition-colors"
             />
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery('')}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-[#94A3B8] hover:text-[#0F2942]"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-[#94A3B8] hover:text-[#0F2942] p-1"
+                aria-label="Clear search query"
               >
                 Clear
               </button>
@@ -146,9 +151,9 @@ export function PublicationsSection({ selectedDomain, onSelectDomain }: Publicat
                 <button
                   key={domain}
                   onClick={() => onSelectDomain(domain)}
-                  className={`px-2.5 py-1 text-xs rounded-md transition-colors cursor-pointer ${
+                  className={`px-2.5 py-1 text-xs rounded-md transition-colors cursor-pointer min-h-[32px] ${
                     selectedDomain === domain
-                      ? 'bg-[#0F2942] text-white font-medium'
+                      ? 'bg-[#0F2942] text-white font-medium shadow-2xs'
                       : 'bg-[#F1F5F9] text-[#475569] hover:bg-[#E2E8F0]'
                   }`}
                 >
@@ -168,7 +173,7 @@ export function PublicationsSection({ selectedDomain, onSelectDomain }: Publicat
                 <button
                   key={type}
                   onClick={() => setSelectedType(type)}
-                  className={`px-2.5 py-0.5 text-xs rounded-md transition-colors cursor-pointer ${
+                  className={`px-2.5 py-1 text-xs rounded-md transition-colors cursor-pointer min-h-[30px] ${
                     selectedType === type
                       ? 'bg-[#334155] text-white font-medium'
                       : 'bg-[#F1F5F9] text-[#64748B] hover:bg-[#E2E8F0]'
@@ -181,9 +186,9 @@ export function PublicationsSection({ selectedDomain, onSelectDomain }: Publicat
           </div>
         </div>
 
-        {/* Publications List */}
+        {/* Publications List with Smooth Stagger Transition */}
         {filteredPublications.length === 0 ? (
-          <div className="bg-white rounded-lg border border-[#E2E8F0] p-12 text-center text-[#64748B]">
+          <div className="bg-white rounded-lg border border-[#E2E8F0] p-10 sm:p-12 text-center text-[#64748B]">
             <p className="text-base font-medium text-[#1E293B]">No publications match your criteria</p>
             <p className="text-xs mt-1">Try clearing search keywords or selecting "All" domains.</p>
             <button
@@ -192,20 +197,30 @@ export function PublicationsSection({ selectedDomain, onSelectDomain }: Publicat
                 onSelectDomain('All');
                 setSelectedType('All');
               }}
-              className="mt-4 px-3 py-1.5 text-xs font-semibold text-[#0F2942] bg-[#F1F5F9] rounded-md hover:bg-[#E2E8F0]"
+              className="mt-4 px-4 py-2 text-xs font-semibold text-[#0F2942] bg-[#F1F5F9] rounded-md hover:bg-[#E2E8F0] min-h-[38px] cursor-pointer"
             >
               Reset Filters
             </button>
           </div>
         ) : (
-          <div className="space-y-4">
+          <motion.div
+            key={`${selectedDomain}-${selectedType}-${searchQuery}`}
+            initial={{ opacity: 0.6 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.2 }}
+            className="space-y-4"
+          >
             {filteredPublications.map((pub, idx) => {
               const isExpanded = expandedAbstracts[pub.id] ?? false;
               return (
-                <article
+                <motion.article
                   key={pub.id}
                   id={`pub-${pub.id}`}
-                  className="bg-white rounded-lg border border-[#E2E8F0] p-5 sm:p-6 shadow-2xs hover:border-[#CBD5E1] transition-colors"
+                  initial={{ opacity: 0, y: 14 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.1 }}
+                  transition={{ duration: 0.3, delay: Math.min(idx * 0.04, 0.3) }}
+                  className="bg-white rounded-lg border border-[#E2E8F0] p-4 sm:p-6 shadow-2xs hover:border-[#CBD5E1] transition-all card-academic-interactive"
                 >
                   <div className="flex flex-col md:flex-row md:items-start justify-between gap-3">
                     <div className="space-y-2 flex-1">
@@ -229,12 +244,12 @@ export function PublicationsSection({ selectedDomain, onSelectDomain }: Publicat
                       </div>
 
                       {/* Title */}
-                      <h3 className="text-base sm:text-lg font-semibold text-[#0F2942] leading-snug">
+                      <h3 className="text-base sm:text-lg font-semibold text-[#0F2942] leading-snug text-break-academic">
                         {pub.title}
                       </h3>
 
                       {/* Authors */}
-                      <div className="text-xs sm:text-sm text-[#475569]">
+                      <div className="text-xs sm:text-sm text-[#475569] leading-relaxed">
                         {pub.authors.map((author, aIdx) => {
                           const isHarish = author.includes('Harish') || author.includes('Bhabad');
                           return (
@@ -258,7 +273,7 @@ export function PublicationsSection({ selectedDomain, onSelectDomain }: Publicat
                         {pub.doi && (
                           <>
                             <span>•</span>
-                            <span className="font-mono not-italic text-[11px] text-[#475569]">
+                            <span className="font-mono not-italic text-[11px] text-[#475569] text-break-academic">
                               DOI: {pub.doi}
                             </span>
                           </>
@@ -279,7 +294,7 @@ export function PublicationsSection({ selectedDomain, onSelectDomain }: Publicat
                     </div>
 
                     {/* Right side actions */}
-                    <div className="flex md:flex-col items-center md:items-end gap-2 shrink-0 pt-2 md:pt-0">
+                    <div className="flex sm:flex-row md:flex-col items-center md:items-end gap-2 shrink-0 pt-2 md:pt-0">
                       {pub.citationsCount !== undefined && (
                         <div className="text-[11px] text-[#475569] bg-[#F1F5F9] px-2 py-1 rounded-sm border border-[#E2E8F0] font-medium">
                           {pub.citationsCount} Citations
@@ -289,7 +304,7 @@ export function PublicationsSection({ selectedDomain, onSelectDomain }: Publicat
                       <div className="flex items-center gap-1.5">
                         <button
                           onClick={() => setActiveCitePub(pub)}
-                          className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold text-[#0F2942] bg-[#F8FAFC] hover:bg-[#F1F5F9] border border-[#CBD5E1] rounded-md transition-colors cursor-pointer"
+                          className="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-semibold text-[#0F2942] bg-[#F8FAFC] hover:bg-[#F1F5F9] border border-[#CBD5E1] rounded-md transition-all cursor-pointer min-h-[36px] hover:-translate-y-0.5 active:translate-y-0"
                           title="Cite paper in BibTeX or APA"
                         >
                           <Quote className="w-3.5 h-3.5" />
@@ -301,7 +316,7 @@ export function PublicationsSection({ selectedDomain, onSelectDomain }: Publicat
                             href={pub.url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium text-[#475569] hover:text-[#0F2942] bg-[#F8FAFC] hover:bg-[#F1F5F9] border border-[#CBD5E1] rounded-md transition-colors"
+                            className="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-[#475569] hover:text-[#0F2942] bg-[#F8FAFC] hover:bg-[#F1F5F9] border border-[#CBD5E1] rounded-md transition-all min-h-[36px] hover:-translate-y-0.5 active:translate-y-0"
                             title="View paper page or DOI"
                           >
                             <ExternalLink className="w-3.5 h-3.5" />
@@ -316,104 +331,110 @@ export function PublicationsSection({ selectedDomain, onSelectDomain }: Publicat
                   <div className="mt-4 pt-3 border-t border-[#F1F5F9]">
                     <button
                       onClick={() => toggleAbstract(pub.id)}
-                      className="inline-flex items-center gap-1.5 text-xs font-medium text-[#475569] hover:text-[#0F2942] cursor-pointer"
+                      className="inline-flex items-center gap-1.5 text-xs font-medium text-[#475569] hover:text-[#0F2942] cursor-pointer min-h-[32px]"
                     >
                       <span>{isExpanded ? 'Hide Abstract' : 'View Abstract'}</span>
                       {isExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
                     </button>
 
-                    {isExpanded && (
-                      <div className="mt-2 text-xs sm:text-sm text-[#334155] leading-relaxed bg-[#F8FAFC] p-3.5 rounded-md border border-[#E2E8F0]">
-                        <p>{pub.abstract}</p>
-                      </div>
-                    )}
+                    <AnimatePresence>
+                      {isExpanded && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: 'auto' }}
+                          exit={{ opacity: 0, height: 0 }}
+                          transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+                          className="overflow-hidden"
+                        >
+                          <div className="mt-2 text-xs sm:text-sm text-[#334155] leading-relaxed bg-[#F8FAFC] p-3.5 rounded-md border border-[#E2E8F0]">
+                            <p>{pub.abstract}</p>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   </div>
-                </article>
+                </motion.article>
               );
             })}
-          </div>
+          </motion.div>
         )}
       </div>
 
       {/* Citation Modal */}
-      {activeCitePub && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
-          <div className="bg-white rounded-lg border border-[#CBD5E1] shadow-xl max-w-2xl w-full p-6 space-y-4 max-h-[90vh] overflow-y-auto">
-            <div className="flex items-start justify-between">
-              <div>
-                <div className="text-xs uppercase tracking-wider font-semibold text-[#64748B]">
-                  Citation Reference
+      <AnimatePresence>
+        {activeCitePub && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-xs">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.96 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.96 }}
+              transition={{ duration: 0.2 }}
+              className="bg-white rounded-lg border border-[#CBD5E1] shadow-xl max-w-2xl w-full p-5 sm:p-6 space-y-4 max-h-[90vh] overflow-y-auto"
+            >
+              <div className="flex items-start justify-between gap-2">
+                <div>
+                  <div className="text-xs uppercase tracking-wider font-semibold text-[#64748B]">
+                    Citation Reference
+                  </div>
+                  <h3 className="text-base font-semibold text-[#0F2942] leading-snug mt-1 text-break-academic">
+                    {activeCitePub.title}
+                  </h3>
                 </div>
-                <h3 className="text-base font-semibold text-[#0F2942] leading-snug mt-1">
-                  {activeCitePub.title}
-                </h3>
-              </div>
-              <button
-                onClick={() => setActiveCitePub(null)}
-                className="text-[#94A3B8] hover:text-[#0F2942] p-1 cursor-pointer"
-                aria-label="Close Citation Dialog"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            {/* APA Formatted */}
-            <div className="space-y-1.5">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-[#334155]">APA Citation</span>
                 <button
-                  onClick={() => copyToClipboard(generateAPACitation(activeCitePub), 'apa')}
-                  className="inline-flex items-center gap-1 text-xs font-medium text-[#0F2942] hover:underline cursor-pointer"
+                  onClick={() => setActiveCitePub(null)}
+                  className="p-1.5 text-[#94A3B8] hover:text-[#0F2942] rounded-md min-w-[36px] min-h-[36px] flex items-center justify-center cursor-pointer"
+                  aria-label="Close citation dialog"
                 >
-                  {copiedAPA ? (
-                    <>
-                      <Check className="w-3 h-3 text-emerald-600" />
-                      <span className="text-emerald-600">Copied!</span>
-                    </>
-                  ) : (
-                    <span>Copy APA</span>
-                  )}
+                  <X className="w-5 h-5" />
                 </button>
               </div>
-              <div className="p-3 bg-[#F8FAFC] border border-[#E2E8F0] rounded-md text-xs text-[#334155] font-serif-academic leading-relaxed">
-                {generateAPACitation(activeCitePub)}
-              </div>
-            </div>
 
-            {/* BibTeX Formatted */}
-            <div className="space-y-1.5">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-[#334155]">BibTeX Entry</span>
+              {/* BibTeX Section */}
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-semibold text-[#334155]">BibTeX Format</span>
+                  <button
+                    onClick={() => copyToClipboard(activeCitePub.bibtex, 'bibtex')}
+                    className="inline-flex items-center gap-1 text-xs text-[#0F2942] hover:underline font-semibold cursor-pointer min-h-[32px]"
+                  >
+                    {copiedBibtex ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : null}
+                    <span>{copiedBibtex ? 'Copied BibTeX!' : 'Copy BibTeX'}</span>
+                  </button>
+                </div>
+                <pre className="p-3 bg-[#F8FAFC] border border-[#E2E8F0] rounded-md text-[11px] font-mono text-[#334155] overflow-x-auto whitespace-pre">
+                  {activeCitePub.bibtex}
+                </pre>
+              </div>
+
+              {/* APA Section */}
+              <div className="space-y-2 pt-2 border-t border-[#F1F5F9]">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-semibold text-[#334155]">APA Style</span>
+                  <button
+                    onClick={() => copyToClipboard(generateAPACitation(activeCitePub), 'apa')}
+                    className="inline-flex items-center gap-1 text-xs text-[#0F2942] hover:underline font-semibold cursor-pointer min-h-[32px]"
+                  >
+                    {copiedAPA ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : null}
+                    <span>{copiedAPA ? 'Copied APA!' : 'Copy APA Citation'}</span>
+                  </button>
+                </div>
+                <div className="p-3 bg-[#F8FAFC] border border-[#E2E8F0] rounded-md text-xs text-[#334155] leading-relaxed text-break-academic">
+                  {generateAPACitation(activeCitePub)}
+                </div>
+              </div>
+
+              <div className="flex justify-end pt-2">
                 <button
-                  onClick={() => copyToClipboard(activeCitePub.bibtex, 'bibtex')}
-                  className="inline-flex items-center gap-1 text-xs font-medium text-[#0F2942] hover:underline cursor-pointer"
+                  onClick={() => setActiveCitePub(null)}
+                  className="px-4 py-2 text-xs font-semibold text-white bg-[#0F2942] rounded-md hover:bg-[#1A3E61] min-h-[40px] cursor-pointer"
                 >
-                  {copiedBibtex ? (
-                    <>
-                      <Check className="w-3 h-3 text-emerald-600" />
-                      <span className="text-emerald-600">Copied!</span>
-                    </>
-                  ) : (
-                    <span>Copy BibTeX</span>
-                  )}
+                  Close
                 </button>
               </div>
-              <pre className="p-3 bg-[#0F172A] text-[#E2E8F0] border border-[#1E293B] rounded-md text-[11px] font-mono leading-relaxed overflow-x-auto">
-                {activeCitePub.bibtex}
-              </pre>
-            </div>
-
-            <div className="pt-3 border-t border-[#E2E8F0] flex justify-end">
-              <button
-                onClick={() => setActiveCitePub(null)}
-                className="px-4 py-1.5 text-xs font-semibold text-white bg-[#0F2942] rounded-md hover:bg-[#1E3A5F] cursor-pointer"
-              >
-                Close
-              </button>
-            </div>
+            </motion.div>
           </div>
-        </div>
-      )}
+        )}
+      </AnimatePresence>
     </section>
   );
 }

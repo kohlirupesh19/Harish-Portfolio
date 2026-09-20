@@ -1,10 +1,11 @@
 import { useState, useMemo } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import { PageHeader } from '../components/PageHeader';
-import { PUBLICATIONS, PROFESSOR_INFO } from '../data/professorData';
+import { PageTransition } from '../components/PageTransition';
+import { PUBLICATIONS } from '../data/professorData';
 import { Publication, ResearchDomain } from '../types';
 import { 
   Search, 
-  Filter, 
   BookOpen, 
   ExternalLink, 
   Copy, 
@@ -12,9 +13,7 @@ import {
   FileText, 
   X,
   Sparkles,
-  Quote,
-  ChevronDown,
-  ArrowUpRight
+  Quote
 } from 'lucide-react';
 
 export function PublicationsPage() {
@@ -80,116 +79,100 @@ export function PublicationsPage() {
   };
 
   return (
-    <div className="bg-[#FBFBF9] min-h-screen">
+    <PageTransition className="bg-[#FBFBF9] min-h-screen overflow-hidden">
       <PageHeader
         category="Scholarly Repository"
-        title="Peer-Reviewed Publications & Research Papers"
+        title="Publications, Journals & Proceedings"
         description="Comprehensive collection of research publications across international journals, IEEE symposiums, and peer-reviewed conference proceedings authored by Prof. Harish Parshuram Bhabad."
         breadcrumb="Publications"
-        badge="Verified Citations"
+        badge="14+ Research Works"
       />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
-        {/* Scholar Identification & Metrics Strip */}
-        <div className="bg-white rounded-lg border border-[#E2E8F0] p-5 shadow-2xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-md bg-[#0F2942] text-white flex items-center justify-center font-bold text-sm">
-              <Quote className="w-5 h-5" />
-            </div>
-            <div>
-              <div className="text-sm font-bold text-[#0F2942]">
-                Google Scholar & ORCID Indexed Works
-              </div>
-              <div className="text-xs text-[#64748B]">
-                ORCID: <a href={PROFESSOR_INFO.orcidUrl} target="_blank" rel="noopener noreferrer" className="font-mono text-[#0F2942] hover:underline">{PROFESSOR_INFO.orcidId}</a>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <a
-              href={PROFESSOR_INFO.googleScholarUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-[#0F2942] bg-[#F1F5F9] hover:bg-[#E2E8F0] rounded-md transition-colors"
-            >
-              <span>View Google Scholar Profile</span>
-              <ExternalLink className="w-3.5 h-3.5" />
-            </a>
-          </div>
-        </div>
-
-        {/* Filter & Search Toolbar */}
-        <div className="bg-white rounded-lg border border-[#E2E8F0] p-6 shadow-2xs space-y-4">
-          {/* Top Row: Search Input + Sort */}
-          <div className="flex flex-col sm:flex-row gap-3">
-            <div className="relative flex-1">
-              <Search className="w-4 h-4 text-[#94A3B8] absolute left-3.5 top-1/2 -translate-y-1/2" />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12 space-y-8">
+        {/* Search, Filter, and Sort Controls */}
+        <div className="bg-white rounded-lg border border-[#CBD5E1] p-4 sm:p-6 shadow-2xs space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-3 sm:gap-4 items-center">
+            {/* Search Box */}
+            <div className="md:col-span-8 relative">
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#94A3B8]" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search publications by title, keyword, co-author, or venue..."
-                className="w-full pl-10 pr-4 py-2 text-xs sm:text-sm bg-[#F8FAFC] border border-[#CBD5E1] rounded-md focus:outline-hidden focus:border-[#0F2942] focus:ring-1 focus:ring-[#0F2942]"
+                placeholder="Search by keywords, title, author, or venue..."
+                className="w-full pl-10 pr-10 py-2.5 text-xs sm:text-sm bg-[#F8FAFC] border border-[#CBD5E1] rounded-md focus-visible:outline-2 focus-visible:outline-[#0F2942] focus:bg-white transition-colors"
               />
               {searchQuery && (
                 <button
                   onClick={() => setSearchQuery('')}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-[#64748B] hover:text-[#0F2942]"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-[#94A3B8] hover:text-[#0F2942] p-1"
                 >
                   Clear
                 </button>
               )}
             </div>
 
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-[#64748B] font-medium whitespace-nowrap">
-                Sort by:
-              </span>
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value as 'year' | 'citations')}
-                className="px-3 py-2 text-xs bg-[#F8FAFC] border border-[#CBD5E1] rounded-md focus:outline-hidden focus:border-[#0F2942]"
-              >
-                <option value="year">Publication Year (Newest)</option>
-                <option value="citations">Citation Count (Highest)</option>
-              </select>
+            {/* Sort Control */}
+            <div className="md:col-span-4 flex items-center justify-end gap-2">
+              <span className="text-xs text-[#64748B] font-medium whitespace-nowrap">Sort by:</span>
+              <div className="flex border border-[#CBD5E1] rounded-md overflow-hidden bg-white text-xs">
+                <button
+                  onClick={() => setSortBy('year')}
+                  className={`px-3 py-1.5 font-medium transition-colors cursor-pointer min-h-[36px] ${
+                    sortBy === 'year'
+                      ? 'bg-[#0F2942] text-white'
+                      : 'text-[#475569] hover:bg-[#F1F5F9]'
+                  }`}
+                >
+                  Newest First
+                </button>
+                <button
+                  onClick={() => setSortBy('citations')}
+                  className={`px-3 py-1.5 font-medium transition-colors cursor-pointer min-h-[36px] ${
+                    sortBy === 'citations'
+                      ? 'bg-[#0F2942] text-white'
+                      : 'text-[#475569] hover:bg-[#F1F5F9]'
+                  }`}
+                >
+                  Most Cited
+                </button>
+              </div>
             </div>
           </div>
 
           {/* Domain Filter Pills */}
-          <div className="space-y-1.5 pt-2 border-t border-[#F1F5F9]">
-            <div className="text-[11px] font-semibold text-[#64748B] uppercase tracking-wider">
-              Research Domain
-            </div>
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2 pt-2 border-t border-[#F1F5F9]">
+            <span className="text-xs font-semibold text-[#475569] sm:w-20 shrink-0">
+              Domain:
+            </span>
             <div className="flex flex-wrap gap-1.5">
-              {domains.map((dom) => (
+              {domains.map((d) => (
                 <button
-                  key={dom}
-                  onClick={() => setSelectedDomain(dom)}
-                  className={`px-2.5 py-1 text-xs font-medium rounded-md transition-colors cursor-pointer ${
-                    selectedDomain === dom
-                      ? 'bg-[#0F2942] text-white font-semibold'
-                      : 'bg-[#F8FAFC] text-[#475569] border border-[#E2E8F0] hover:bg-[#F1F5F9]'
+                  key={d}
+                  onClick={() => setSelectedDomain(d)}
+                  className={`px-2.5 py-1 text-xs rounded-md transition-colors cursor-pointer min-h-[32px] ${
+                    selectedDomain === d
+                      ? 'bg-[#0F2942] text-white font-medium shadow-2xs'
+                      : 'bg-[#F1F5F9] text-[#475569] hover:bg-[#E2E8F0]'
                   }`}
                 >
-                  {dom}
+                  {d}
                 </button>
               ))}
             </div>
           </div>
 
           {/* Type Filter Pills */}
-          <div className="flex items-center gap-2 pt-2 border-t border-[#F1F5F9]">
-            <span className="text-[11px] font-semibold text-[#64748B] uppercase tracking-wider">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2 pt-2 border-t border-[#F1F5F9]">
+            <span className="text-xs font-semibold text-[#475569] sm:w-20 shrink-0">
               Type:
             </span>
-            <div className="flex gap-1.5">
+            <div className="flex flex-wrap gap-1.5">
               {types.map((t) => (
                 <button
                   key={t}
                   onClick={() => setSelectedType(t)}
-                  className={`px-2.5 py-0.5 text-xs font-medium rounded-xs transition-colors cursor-pointer ${
+                  className={`px-2.5 py-1 text-xs rounded-md transition-colors cursor-pointer min-h-[30px] ${
                     selectedType === t
                       ? 'bg-[#0F2942] text-white font-semibold'
                       : 'bg-[#F8FAFC] text-[#475569] border border-[#E2E8F0] hover:bg-[#F1F5F9]'
@@ -214,62 +197,72 @@ export function PublicationsPage() {
                 setSelectedDomain('All');
                 setSelectedType('All');
               }}
-              className="text-[#0F2942] font-semibold hover:underline cursor-pointer"
+              className="text-[#0F2942] font-semibold hover:underline cursor-pointer min-h-[32px] flex items-center"
             >
               Reset Filters
             </button>
           )}
         </div>
 
-        {/* Publications List */}
-        <div className="space-y-4">
-          {filteredPublications.length === 0 ? (
-            <div className="bg-white rounded-lg border border-[#E2E8F0] p-12 text-center space-y-3">
-              <FileText className="w-10 h-10 text-[#94A3B8] mx-auto" />
-              <div className="text-base font-bold text-[#0F2942]">
-                No Publications Found
-              </div>
-              <p className="text-xs text-[#64748B] max-w-sm mx-auto">
-                No publications match your current filter parameters. Try clearing the search query or selecting another domain.
-              </p>
-              <button
-                onClick={() => {
-                  setSearchQuery('');
-                  setSelectedDomain('All');
-                  setSelectedType('All');
-                }}
-                className="mt-2 px-3.5 py-1.5 text-xs font-semibold text-white bg-[#0F2942] rounded-md hover:bg-[#1A3E61] cursor-pointer"
-              >
-                Clear All Filters
-              </button>
+        {/* Publications List with Smooth Transition */}
+        {filteredPublications.length === 0 ? (
+          <div className="bg-white rounded-lg border border-[#E2E8F0] p-10 sm:p-12 text-center space-y-3">
+            <FileText className="w-10 h-10 text-[#94A3B8] mx-auto" />
+            <div className="text-base font-bold text-[#0F2942]">
+              No Publications Found
             </div>
-          ) : (
-            filteredPublications.map((pub) => {
+            <p className="text-xs text-[#64748B] max-w-sm mx-auto">
+              No publications match your current filter parameters. Try clearing the search query or selecting another domain.
+            </p>
+            <button
+              onClick={() => {
+                setSearchQuery('');
+                setSelectedDomain('All');
+                setSelectedType('All');
+              }}
+              className="mt-2 px-4 py-2 text-xs font-semibold text-white bg-[#0F2942] rounded-md hover:bg-[#1A3E61] cursor-pointer min-h-[38px]"
+            >
+              Clear All Filters
+            </button>
+          </div>
+        ) : (
+          <motion.div
+            key={`${selectedDomain}-${selectedType}-${searchQuery}-${sortBy}`}
+            initial={{ opacity: 0.6 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.2 }}
+            className="space-y-4"
+          >
+            {filteredPublications.map((pub, idx) => {
               const isExpanded = expandedAbstractId === pub.id;
 
               return (
-                <div
+                <motion.article
                   key={pub.id}
-                  className="bg-white rounded-lg border border-[#E2E8F0] p-6 shadow-2xs hover:border-[#CBD5E1] transition-all space-y-3"
+                  initial={{ opacity: 0, y: 14 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.1 }}
+                  transition={{ duration: 0.3, delay: Math.min(idx * 0.04, 0.3) }}
+                  className="bg-white rounded-lg border border-[#E2E8F0] p-4 sm:p-6 shadow-2xs hover:border-[#CBD5E1] transition-all space-y-3 card-academic-interactive"
                 >
                   {/* Metadata Header Line */}
                   <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
-                    <div className="flex items-center gap-2">
-                      <span className="px-2 py-0.5 font-semibold bg-[#0F2942] text-white rounded-xs">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="px-2 py-0.5 font-semibold bg-[#0F2942] text-white rounded-xs text-[10px] uppercase">
                         {pub.type}
                       </span>
-                      <span className="px-2 py-0.5 bg-[#F1F5F9] text-[#475569] rounded-xs font-medium border border-[#E2E8F0]">
+                      <span className="px-2 py-0.5 bg-[#F1F5F9] text-[#475569] rounded-xs font-medium border border-[#E2E8F0] text-[11px]">
                         {pub.domain}
                       </span>
                       {pub.highlight && (
                         <span className="flex items-center gap-1 text-[11px] text-amber-700 bg-amber-50 px-2 py-0.5 rounded-xs border border-amber-200">
-                          <Sparkles className="w-3 h-3" />
+                          <Sparkles className="w-3 h-3 text-amber-600" />
                           <span>Featured Paper</span>
                         </span>
                       )}
                     </div>
 
-                    <div className="flex items-center gap-3 text-[#64748B] font-mono">
+                    <div className="flex items-center gap-2 sm:gap-3 text-[#64748B] font-mono text-xs">
                       <span>{pub.year}</span>
                       {pub.citationsCount !== undefined && (
                         <span>• {pub.citationsCount} Citations</span>
@@ -278,7 +271,7 @@ export function PublicationsPage() {
                   </div>
 
                   {/* Title */}
-                  <h3 className="text-base sm:text-lg font-bold text-[#0F2942] leading-snug">
+                  <h3 className="text-base sm:text-lg font-bold text-[#0F2942] leading-snug text-break-academic">
                     {pub.title}
                   </h3>
 
@@ -298,7 +291,7 @@ export function PublicationsPage() {
                     </p>
                     <button
                       onClick={() => setExpandedAbstractId(isExpanded ? null : pub.id)}
-                      className="text-[#0F2942] font-semibold text-xs hover:underline mt-1 cursor-pointer"
+                      className="text-[#0F2942] font-semibold text-xs hover:underline mt-1 cursor-pointer min-h-[32px] inline-flex items-center"
                     >
                       {isExpanded ? 'Collapse Abstract' : 'Read Full Abstract...'}
                     </button>
@@ -306,10 +299,10 @@ export function PublicationsPage() {
 
                   {/* Keywords */}
                   <div className="flex flex-wrap gap-1.5 pt-1">
-                    {pub.keywords.map((kw, idx) => (
+                    {pub.keywords.map((kw, kIdx) => (
                       <span
-                        key={idx}
-                        className="px-2 py-0.5 text-[11px] bg-[#F8FAFC] text-[#475569] border border-[#E2E8F0] rounded-xs"
+                        key={kIdx}
+                        className="px-2 py-0.5 text-[10px] bg-[#F8FAFC] text-[#475569] border border-[#E2E8F0] rounded-xs"
                       >
                         {kw}
                       </span>
@@ -317,14 +310,14 @@ export function PublicationsPage() {
                   </div>
 
                   {/* Action Buttons & Links */}
-                  <div className="pt-3 border-t border-[#F1F5F9] flex flex-wrap items-center justify-between gap-3 text-xs">
+                  <div className="pt-3 border-t border-[#F1F5F9] flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
                     <div className="flex flex-wrap items-center gap-3">
                       {pub.doi && (
                         <a
                           href={`https://doi.org/${pub.doi}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 font-mono text-[11px] text-[#0F2942] hover:underline"
+                          className="inline-flex items-center gap-1 font-mono text-[11px] text-[#0F2942] hover:underline min-h-[36px]"
                         >
                           <span>DOI: {pub.doi}</span>
                           <ExternalLink className="w-3 h-3 text-[#64748B]" />
@@ -335,7 +328,7 @@ export function PublicationsPage() {
                         href={pub.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 text-[#0F2942] hover:underline font-medium"
+                        className="inline-flex items-center gap-1 text-[#0F2942] hover:underline font-medium min-h-[36px]"
                       >
                         <span>Journal / Record</span>
                         <ExternalLink className="w-3 h-3 text-[#64748B]" />
@@ -344,103 +337,94 @@ export function PublicationsPage() {
 
                     <button
                       onClick={() => setActiveBibtex(pub)}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#F1F5F9] hover:bg-[#E2E8F0] text-[#0F2942] font-semibold transition-colors cursor-pointer"
+                      className="inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-md bg-[#F1F5F9] hover:bg-[#E2E8F0] text-[#0F2942] font-semibold transition-all cursor-pointer min-h-[38px] hover:-translate-y-0.5 active:translate-y-0"
                     >
                       <Quote className="w-3.5 h-3.5" />
                       <span>Cite (BibTeX / APA)</span>
                     </button>
                   </div>
-                </div>
+                </motion.article>
               );
-            })
-          )}
-        </div>
+            })}
+          </motion.div>
+        )}
       </div>
 
       {/* Citation Modal */}
-      {activeBibtex && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
-          <div className="bg-white rounded-lg border border-[#CBD5E1] shadow-xl max-w-2xl w-full p-6 space-y-5">
-            <div className="flex items-start justify-between">
-              <div>
-                <span className="text-xs uppercase font-bold tracking-wider text-[#0F2942]">
-                  Academic Citation
-                </span>
-                <h3 className="text-base font-bold text-[#0F2942] mt-1 line-clamp-2">
-                  {activeBibtex.title}
-                </h3>
-              </div>
-              <button
-                onClick={() => setActiveBibtex(null)}
-                className="text-[#94A3B8] hover:text-[#0F2942] p-1 cursor-pointer"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            {/* APA Format */}
-            <div className="space-y-1.5">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-[#334155]">APA Citation</span>
+      <AnimatePresence>
+        {activeBibtex && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-xs">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.96 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.96 }}
+              transition={{ duration: 0.2 }}
+              className="bg-white rounded-lg border border-[#CBD5E1] shadow-xl max-w-2xl w-full p-5 sm:p-6 space-y-4 max-h-[90vh] overflow-y-auto"
+            >
+              <div className="flex items-start justify-between gap-2">
+                <div>
+                  <div className="text-xs uppercase tracking-wider font-semibold text-[#64748B]">
+                    Academic Citation
+                  </div>
+                  <h3 className="text-base font-semibold text-[#0F2942] leading-snug mt-1 text-break-academic">
+                    {activeBibtex.title}
+                  </h3>
+                </div>
                 <button
-                  onClick={() => copyToClipboard(getApaCitation(activeBibtex), 'apa')}
-                  className="text-xs font-semibold text-[#0F2942] hover:underline flex items-center gap-1 cursor-pointer"
+                  onClick={() => setActiveBibtex(null)}
+                  className="p-1.5 text-[#94A3B8] hover:text-[#0F2942] rounded-md min-w-[36px] min-h-[36px] flex items-center justify-center cursor-pointer"
+                  aria-label="Close citation dialog"
                 >
-                  {copiedApa ? (
-                    <>
-                      <Check className="w-3.5 h-3.5 text-emerald-600" />
-                      <span className="text-emerald-700">Copied!</span>
-                    </>
-                  ) : (
-                    <>
-                      <Copy className="w-3.5 h-3.5" />
-                      <span>Copy APA</span>
-                    </>
-                  )}
+                  <X className="w-5 h-5" />
                 </button>
               </div>
-              <div className="p-3 bg-[#F8FAFC] border border-[#E2E8F0] rounded-md text-xs text-[#334155] leading-relaxed">
-                {getApaCitation(activeBibtex)}
-              </div>
-            </div>
 
-            {/* BibTeX Format */}
-            <div className="space-y-1.5">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-[#334155]">BibTeX Entry</span>
+              {/* BibTeX Section */}
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-semibold text-[#334155]">BibTeX Format</span>
+                  <button
+                    onClick={() => copyToClipboard(activeBibtex.bibtex, 'bibtex')}
+                    className="inline-flex items-center gap-1 text-xs text-[#0F2942] hover:underline font-semibold cursor-pointer min-h-[32px]"
+                  >
+                    {copiedBibtex ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : null}
+                    <span>{copiedBibtex ? 'Copied BibTeX!' : 'Copy BibTeX'}</span>
+                  </button>
+                </div>
+                <pre className="p-3 bg-[#F8FAFC] border border-[#E2E8F0] rounded-md text-[11px] font-mono text-[#334155] overflow-x-auto whitespace-pre">
+                  {activeBibtex.bibtex}
+                </pre>
+              </div>
+
+              {/* APA Section */}
+              <div className="space-y-2 pt-2 border-t border-[#F1F5F9]">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-semibold text-[#334155]">APA Style</span>
+                  <button
+                    onClick={() => copyToClipboard(getApaCitation(activeBibtex), 'apa')}
+                    className="inline-flex items-center gap-1 text-xs text-[#0F2942] hover:underline font-semibold cursor-pointer min-h-[32px]"
+                  >
+                    {copiedApa ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : null}
+                    <span>{copiedApa ? 'Copied APA!' : 'Copy APA Citation'}</span>
+                  </button>
+                </div>
+                <div className="p-3 bg-[#F8FAFC] border border-[#E2E8F0] rounded-md text-xs text-[#334155] leading-relaxed text-break-academic">
+                  {getApaCitation(activeBibtex)}
+                </div>
+              </div>
+
+              <div className="flex justify-end pt-2">
                 <button
-                  onClick={() => copyToClipboard(activeBibtex.bibtex, 'bibtex')}
-                  className="text-xs font-semibold text-[#0F2942] hover:underline flex items-center gap-1 cursor-pointer"
+                  onClick={() => setActiveBibtex(null)}
+                  className="px-4 py-2 text-xs font-semibold text-white bg-[#0F2942] rounded-md hover:bg-[#1A3E61] min-h-[40px] cursor-pointer"
                 >
-                  {copiedBibtex ? (
-                    <>
-                      <Check className="w-3.5 h-3.5 text-emerald-600" />
-                      <span className="text-emerald-700">Copied!</span>
-                    </>
-                  ) : (
-                    <>
-                      <Copy className="w-3.5 h-3.5" />
-                      <span>Copy BibTeX</span>
-                    </>
-                  )}
+                  Close
                 </button>
               </div>
-              <pre className="p-3 bg-[#0F1D2B] text-slate-200 rounded-md text-xs font-mono overflow-x-auto max-h-48 leading-relaxed">
-                {activeBibtex.bibtex}
-              </pre>
-            </div>
-
-            <div className="pt-2 flex justify-end">
-              <button
-                onClick={() => setActiveBibtex(null)}
-                className="px-4 py-1.5 text-xs font-semibold text-[#475569] bg-[#F1F5F9] hover:bg-[#E2E8F0] rounded-md cursor-pointer"
-              >
-                Close
-              </button>
-            </div>
+            </motion.div>
           </div>
-        </div>
-      )}
-    </div>
+        )}
+      </AnimatePresence>
+    </PageTransition>
   );
 }

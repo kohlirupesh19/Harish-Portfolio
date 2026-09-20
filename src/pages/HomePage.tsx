@@ -1,13 +1,14 @@
 import { Link } from 'react-router-dom';
+import { motion } from 'motion/react';
 import { HeroHeader } from '../components/HeroHeader';
+import { PageTransition } from '../components/PageTransition';
 import { 
   PROFESSOR_INFO, 
   RESEARCH_AREAS, 
   PUBLICATIONS, 
   AUTHORED_BOOK, 
-  COURSES,
-  WORKSHOPS_AND_EVENTS,
-  GUIDED_STUDENT_PROJECTS
+  COURSES, 
+  WORKSHOPS_AND_EVENTS 
 } from '../data/professorData';
 import { 
   BookOpen, 
@@ -17,15 +18,8 @@ import {
   Network, 
   Boxes, 
   ArrowRight, 
-  FileText, 
   Sparkles, 
-  Calendar, 
-  Award, 
-  CheckCircle2, 
-  ExternalLink,
-  ChevronRight,
-  GraduationCap,
-  Users
+  ChevronRight 
 } from 'lucide-react';
 
 export function HomePage() {
@@ -45,19 +39,25 @@ export function HomePage() {
   };
 
   return (
-    <div className="space-y-0">
+    <PageTransition className="space-y-0 overflow-hidden">
       {/* Hero Header with Profile & Bio */}
       <HeroHeader />
 
       {/* Section 1: Research Thrusts Teaser */}
-      <section className="py-14 sm:py-16 border-b border-[#E3E3DC] bg-[#F7F7F4]">
+      <section className="py-12 sm:py-16 border-b border-[#E3E3DC] bg-[#F7F7F4]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+          <motion.div
+            initial={{ opacity: 0, y: 14 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+            className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4"
+          >
             <div>
               <div className="text-xs uppercase tracking-widest font-semibold text-[#0F2942]">
                 Scholarly Research Focus
               </div>
-              <h2 className="font-serif-academic text-2xl sm:text-3xl lg:text-4xl text-[#0F2942] mt-1 font-normal">
+              <h2 className="font-serif-academic text-2xl sm:text-3xl lg:text-4xl text-[#0F2942] mt-1 font-normal text-break-academic">
                 Core Research Domains & Programs
               </h2>
               <p className="mt-2 text-sm text-[#52525B] max-w-2xl leading-relaxed">
@@ -67,18 +67,22 @@ export function HomePage() {
 
             <Link
               to="/research"
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#0F2942] hover:text-[#183B5E] group"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#0F2942] hover:text-[#183B5E] group min-h-[36px]"
             >
               <span>Explore All Research Programs</span>
               <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
             </Link>
-          </div>
+          </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {RESEARCH_AREAS.slice(0, 3).map((area) => (
-              <div
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6">
+            {RESEARCH_AREAS.slice(0, 3).map((area, idx) => (
+              <motion.div
                 key={area.id}
-                className="bg-white rounded-lg border border-[#E2E8F0] p-6 shadow-2xs hover:border-[#CBD5E1] transition-all flex flex-col justify-between"
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.15 }}
+                transition={{ duration: 0.35, delay: idx * 0.08, ease: [0.16, 1, 0.3, 1] }}
+                className="bg-white rounded-lg border border-[#E2E8F0] p-5 sm:p-6 shadow-2xs hover:border-[#CBD5E1] transition-all flex flex-col justify-between card-academic-interactive"
               >
                 <div>
                   <div className="w-10 h-10 rounded-md bg-[#F1F5F9] border border-[#E2E8F0] flex items-center justify-center mb-4">
@@ -104,21 +108,27 @@ export function HomePage() {
                     ))}
                   </div>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
       {/* Section 2: Featured Publications Teaser */}
-      <section className="py-14 sm:py-16 border-b border-[#E3E3DC] bg-[#FBFBF9]">
+      <section className="py-12 sm:py-16 border-b border-[#E3E3DC] bg-[#FBFBF9]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+          <motion.div
+            initial={{ opacity: 0, y: 14 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+            className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4"
+          >
             <div>
               <div className="text-xs uppercase tracking-widest font-semibold text-[#0F2942]">
                 Scholarly Dissemination
               </div>
-              <h2 className="font-serif-academic text-2xl sm:text-3xl lg:text-4xl text-[#0F2942] mt-1 font-normal">
+              <h2 className="font-serif-academic text-2xl sm:text-3xl lg:text-4xl text-[#0F2942] mt-1 font-normal text-break-academic">
                 Featured Peer-Reviewed Publications
               </h2>
               <p className="mt-2 text-sm text-[#52525B] max-w-2xl leading-relaxed">
@@ -128,18 +138,22 @@ export function HomePage() {
 
             <Link
               to="/publications"
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#0F2942] hover:text-[#183B5E] group"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#0F2942] hover:text-[#183B5E] group min-h-[36px]"
             >
               <span>View Full Repository (14+ Papers)</span>
               <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
             </Link>
-          </div>
+          </motion.div>
 
           <div className="space-y-4">
-            {featuredPubs.map((pub) => (
-              <div
+            {featuredPubs.map((pub, idx) => (
+              <motion.div
                 key={pub.id}
-                className="bg-white rounded-lg border border-[#E2E8F0] p-6 shadow-2xs hover:border-[#CBD5E1] transition-colors"
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.15 }}
+                transition={{ duration: 0.35, delay: idx * 0.08, ease: [0.16, 1, 0.3, 1] }}
+                className="bg-white rounded-lg border border-[#E2E8F0] p-5 sm:p-6 shadow-2xs hover:border-[#CBD5E1] transition-all card-academic-interactive"
               >
                 <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 mb-2">
                   <div className="flex items-center gap-2">
@@ -155,7 +169,7 @@ export function HomePage() {
                   </span>
                 </div>
 
-                <h3 className="text-base sm:text-lg font-bold text-[#0F2942] leading-snug">
+                <h3 className="text-base sm:text-lg font-bold text-[#0F2942] leading-snug text-break-academic">
                   {pub.title}
                 </h3>
 
@@ -178,24 +192,24 @@ export function HomePage() {
 
                   <Link
                     to="/publications"
-                    className="inline-flex items-center gap-1 font-semibold text-[#0F2942] hover:underline"
+                    className="inline-flex items-center gap-1 font-semibold text-[#0F2942] hover:underline min-h-[32px]"
                   >
                     <span>Read Paper Details</span>
                     <ChevronRight className="w-3.5 h-3.5" />
                   </Link>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
       {/* Section 3: Authored Book Spotlight */}
-      <section className="py-14 sm:py-16 border-b border-[#E3E3DC] bg-[#FAF8F5]">
+      <section className="py-12 sm:py-16 border-b border-[#E3E3DC] bg-[#FAF8F5]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             <div className="lg:col-span-4 flex justify-center">
-              <div className="bg-[#0F2942] text-white p-6 sm:p-8 rounded-lg shadow-xl border border-[#1E3A5F] max-w-sm w-full relative overflow-hidden">
+              <div className="bg-[#0F2942] text-white p-5 sm:p-7 rounded-lg shadow-xl border border-[#1E3A5F] max-w-sm w-full relative overflow-hidden transition-transform duration-300 hover:-translate-y-1">
                 <div className="text-[10px] uppercase font-bold tracking-widest text-amber-300">
                   Scholarly Monograph
                 </div>
@@ -217,7 +231,7 @@ export function HomePage() {
               <div className="text-xs uppercase tracking-widest font-semibold text-[#0F2942]">
                 Published Monograph
               </div>
-              <h2 className="font-serif-academic text-2xl sm:text-3xl lg:text-4xl text-[#0F2942] font-normal">
+              <h2 className="font-serif-academic text-2xl sm:text-3xl lg:text-4xl text-[#0F2942] font-normal text-break-academic">
                 {AUTHORED_BOOK.title}
               </h2>
               <p className="text-sm sm:text-base text-[#52525B] leading-relaxed">
@@ -226,7 +240,7 @@ export function HomePage() {
               <div className="pt-2">
                 <Link
                   to="/book"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 text-xs sm:text-sm font-semibold text-white bg-[#0F2942] hover:bg-[#1A3E61] rounded-md transition-colors shadow-xs"
+                  className="inline-flex items-center justify-center gap-2 px-5 py-2.5 text-xs sm:text-sm font-semibold text-white bg-[#0F2942] hover:bg-[#1A3E61] rounded-md transition-all shadow-xs min-h-[44px] hover:-translate-y-0.5 active:translate-y-0"
                 >
                   <BookOpen className="w-4 h-4" />
                   <span>View Chapter Outline & Book Details</span>
@@ -239,29 +253,29 @@ export function HomePage() {
       </section>
 
       {/* Section 4: Teaching & Student Guidance Teaser */}
-      <section className="py-14 sm:py-16 border-b border-[#E3E3DC] bg-[#FBFBF9]">
+      <section className="py-12 sm:py-16 border-b border-[#E3E3DC] bg-[#FBFBF9]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
             {/* Left: Teaching Preview */}
-            <div className="bg-white rounded-lg border border-[#E2E8F0] p-6 shadow-2xs space-y-5">
+            <div className="bg-white rounded-lg border border-[#E2E8F0] p-5 sm:p-6 shadow-2xs space-y-4 card-academic-interactive">
               <div className="flex items-center justify-between">
                 <div className="text-xs uppercase tracking-wider font-semibold text-[#0F2942]">
                   University Pedagogy
                 </div>
-                <Link to="/teaching" className="text-xs font-semibold text-[#0F2942] hover:underline flex items-center gap-1">
+                <Link to="/teaching" className="text-xs font-semibold text-[#0F2942] hover:underline flex items-center gap-1 min-h-[32px]">
                   <span>View All 6 Courses</span>
                   <ChevronRight className="w-3 h-3" />
                 </Link>
               </div>
 
-              <h3 className="font-serif-academic text-xl sm:text-2xl font-bold text-[#0F2942]">
+              <h3 className="font-serif-academic text-xl sm:text-2xl font-bold text-[#0F2942] leading-snug">
                 Savitribai Phule Pune University Coursework
               </h3>
               <p className="text-xs sm:text-sm text-[#52525B] leading-relaxed">
                 Delivering core B.E. Computer Engineering curriculum with rigorous laboratory assignments, kernel programming, and forensics pipelines.
               </p>
 
-              <div className="space-y-3 text-xs sm:text-sm">
+              <div className="space-y-2.5 text-xs sm:text-sm">
                 {featuredCourses.map((c) => (
                   <div key={c.code} className="p-3 bg-[#F8FAFC] border border-[#E2E8F0] rounded-md">
                     <div className="flex items-center justify-between">
@@ -276,18 +290,18 @@ export function HomePage() {
             </div>
 
             {/* Right: Institutional & Workshop Leadership */}
-            <div className="bg-white rounded-lg border border-[#E2E8F0] p-6 shadow-2xs space-y-5">
+            <div className="bg-white rounded-lg border border-[#E2E8F0] p-5 sm:p-6 shadow-2xs space-y-4 card-academic-interactive">
               <div className="flex items-center justify-between">
                 <div className="text-xs uppercase tracking-wider font-semibold text-[#0F2942]">
                   Institutional Leadership
                 </div>
-                <Link to="/projects" className="text-xs font-semibold text-[#0F2942] hover:underline flex items-center gap-1">
+                <Link to="/projects" className="text-xs font-semibold text-[#0F2942] hover:underline flex items-center gap-1 min-h-[32px]">
                   <span>View Projects & Events</span>
                   <ChevronRight className="w-3 h-3" />
                 </Link>
               </div>
 
-              <h3 className="font-serif-academic text-xl sm:text-2xl font-bold text-[#0F2942]">
+              <h3 className="font-serif-academic text-xl sm:text-2xl font-bold text-[#0F2942] leading-snug">
                 Departmental & Campus Coordination
               </h3>
               <p className="text-xs sm:text-sm text-[#52525B] leading-relaxed">
@@ -309,17 +323,17 @@ export function HomePage() {
                 </p>
               </div>
 
-              <div className="grid grid-cols-2 gap-3 pt-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
                 <Link
                   to="/resources"
-                  className="p-3 bg-[#FAF8F5] border border-[#E7E2D8] rounded-md text-xs hover:border-[#CBD5E1] transition-colors"
+                  className="p-3 bg-[#FAF8F5] border border-[#E7E2D8] rounded-md text-xs hover:border-[#CBD5E1] transition-all min-h-[44px]"
                 >
                   <div className="font-bold text-[#0F2942]">Student Downloads</div>
                   <div className="text-[11px] text-[#64748B] mt-0.5">Lab manuals & study materials</div>
                 </Link>
                 <Link
                   to="/contact"
-                  className="p-3 bg-[#FAF8F5] border border-[#E7E2D8] rounded-md text-xs hover:border-[#CBD5E1] transition-colors"
+                  className="p-3 bg-[#FAF8F5] border border-[#E7E2D8] rounded-md text-xs hover:border-[#CBD5E1] transition-all min-h-[44px]"
                 >
                   <div className="font-bold text-[#0F2942]">Office Consultation</div>
                   <div className="text-[11px] text-[#64748B] mt-0.5">Room 204, LoGMIEER Nashik</div>
@@ -329,6 +343,6 @@ export function HomePage() {
           </div>
         </div>
       </section>
-    </div>
+    </PageTransition>
   );
 }

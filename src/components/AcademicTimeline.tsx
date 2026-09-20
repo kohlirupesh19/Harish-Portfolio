@@ -1,33 +1,40 @@
+import { motion } from 'motion/react';
 import { EDUCATION_HISTORY, PROFESSIONAL_ROLES } from '../data/professorData';
-import { GraduationCap, Briefcase, Calendar, MapPin, CheckCircle2, Award } from 'lucide-react';
+import { GraduationCap, Briefcase, MapPin } from 'lucide-react';
 
 export function AcademicTimeline() {
   return (
-    <section id="experience" className="py-14 sm:py-16 border-b border-[#E3E3DC] bg-[#F7F7F4]">
+    <section id="experience" className="py-12 sm:py-16 border-b border-[#E3E3DC] bg-[#F7F7F4] overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="mb-10">
+        <motion.div
+          initial={{ opacity: 0, y: 14 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+          className="mb-8 sm:mb-10"
+        >
           <div className="text-xs uppercase tracking-widest font-semibold text-[#0F2942]">
             Background & Trajectory
           </div>
-          <h2 className="font-serif-academic text-2xl sm:text-3xl lg:text-4xl text-[#0F2942] mt-1">
+          <h2 className="font-serif-academic text-2xl sm:text-3xl lg:text-4xl text-[#0F2942] mt-1 text-break-academic">
             Education & Professional Career
           </h2>
           <p className="mt-2 text-sm sm:text-base text-[#52525B] max-w-2xl leading-relaxed">
             A comprehensive record of formal academic degrees, pedagogical appointments, administrative leadership, and software engineering practice.
           </p>
-        </div>
+        </motion.div>
 
         {/* Dual Grid Layout: Education & Appointments */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10">
           {/* Column 1: Academic Degrees */}
           <div className="space-y-6">
             <div className="flex items-center gap-2.5 pb-2 border-b border-[#E2E8F0]">
-              <div className="w-8 h-8 rounded-md bg-[#0F2942] text-white flex items-center justify-center">
+              <div className="w-8 h-8 rounded-md bg-[#0F2942] text-white flex items-center justify-center shrink-0">
                 <GraduationCap className="w-4 h-4" />
               </div>
               <div>
-                <h3 className="text-lg font-bold text-[#0F2942] leading-tight">
+                <h3 className="text-base sm:text-lg font-bold text-[#0F2942] leading-tight">
                   Educational Qualifications
                 </h3>
                 <span className="text-xs text-[#64748B]">Degrees & Research Candidacy</span>
@@ -36,13 +43,17 @@ export function AcademicTimeline() {
 
             <div className="space-y-4">
               {EDUCATION_HISTORY.map((edu, idx) => (
-                <div
+                <motion.div
                   key={idx}
-                  className="bg-white rounded-lg border border-[#E2E8F0] p-5 shadow-2xs space-y-2 hover:border-[#CBD5E1] transition-colors"
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.15 }}
+                  transition={{ duration: 0.35, delay: idx * 0.06, ease: [0.16, 1, 0.3, 1] }}
+                  className="bg-white rounded-lg border border-[#E2E8F0] p-4 sm:p-5 shadow-2xs space-y-2 card-academic-interactive"
                 >
-                  <div className="flex items-start justify-between gap-2">
+                  <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-1.5 sm:gap-2">
                     <div>
-                      <h4 className="text-base font-bold text-[#0F2942] leading-snug">
+                      <h4 className="text-sm sm:text-base font-bold text-[#0F2942] leading-snug">
                         {edu.degree}
                       </h4>
                       <p className="text-xs font-semibold text-[#475569] mt-0.5">
@@ -54,7 +65,7 @@ export function AcademicTimeline() {
                     </div>
 
                     <span
-                      className={`px-2 py-0.5 text-xs font-semibold rounded-xs shrink-0 ${
+                      className={`px-2 py-0.5 text-xs font-semibold rounded-xs shrink-0 self-start sm:self-auto ${
                         edu.status === 'Pursuing'
                           ? 'bg-amber-100 text-amber-900 border border-amber-300'
                           : 'bg-[#F1F5F9] text-[#334155] border border-[#E2E8F0]'
@@ -75,7 +86,7 @@ export function AcademicTimeline() {
                       <strong className="text-[#334155]">Focus:</strong> {edu.focusArea}
                     </p>
                   )}
-                </div>
+                </motion.div>
               ))}
             </div>
           </div>
@@ -83,11 +94,11 @@ export function AcademicTimeline() {
           {/* Column 2: Professional & Administrative Experience */}
           <div className="space-y-6">
             <div className="flex items-center gap-2.5 pb-2 border-b border-[#E2E8F0]">
-              <div className="w-8 h-8 rounded-md bg-[#0F2942] text-white flex items-center justify-center">
+              <div className="w-8 h-8 rounded-md bg-[#0F2942] text-white flex items-center justify-center shrink-0">
                 <Briefcase className="w-4 h-4" />
               </div>
               <div>
-                <h3 className="text-lg font-bold text-[#0F2942] leading-tight">
+                <h3 className="text-base sm:text-lg font-bold text-[#0F2942] leading-tight">
                   Professional Appointments & Leadership
                 </h3>
                 <span className="text-xs text-[#64748B]">Academic Service & Industry Practice</span>
@@ -96,17 +107,19 @@ export function AcademicTimeline() {
 
             <div className="space-y-4">
               {PROFESSIONAL_ROLES.map((role, idx) => (
-                <div
+                <motion.div
                   key={idx}
-                  className="bg-white rounded-lg border border-[#E2E8F0] p-5 shadow-2xs space-y-3 hover:border-[#CBD5E1] transition-colors"
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.15 }}
+                  transition={{ duration: 0.35, delay: idx * 0.06, ease: [0.16, 1, 0.3, 1] }}
+                  className="bg-white rounded-lg border border-[#E2E8F0] p-4 sm:p-5 shadow-2xs space-y-3 card-academic-interactive"
                 >
-                  <div className="flex items-start justify-between gap-2">
+                  <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-1.5 sm:gap-2">
                     <div>
-                      <div className="flex items-center gap-2">
-                        <h4 className="text-base font-bold text-[#0F2942] leading-snug">
-                          {role.role}
-                        </h4>
-                      </div>
+                      <h4 className="text-sm sm:text-base font-bold text-[#0F2942] leading-snug">
+                        {role.role}
+                      </h4>
                       <p className="text-xs font-semibold text-[#475569] mt-0.5">
                         {role.organization}
                       </p>
@@ -116,7 +129,7 @@ export function AcademicTimeline() {
                       </p>
                     </div>
 
-                    <div className="text-right shrink-0">
+                    <div className="sm:text-right shrink-0">
                       <span className="inline-block px-2 py-0.5 text-xs font-medium rounded-xs bg-[#F1F5F9] text-[#334155] border border-[#E2E8F0]">
                         {role.period}
                       </span>
@@ -136,7 +149,7 @@ export function AcademicTimeline() {
                       </li>
                     ))}
                   </ul>
-                </div>
+                </motion.div>
               ))}
             </div>
           </div>

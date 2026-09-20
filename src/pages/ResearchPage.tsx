@@ -1,7 +1,10 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { motion, AnimatePresence } from 'motion/react';
 import { PageHeader } from '../components/PageHeader';
-import { RESEARCH_AREAS, PUBLICATIONS, PROFESSOR_INFO } from '../data/professorData';
+import { PageTransition } from '../components/PageTransition';
+import { ResearchNetworkBackground } from '../components/ResearchNetworkBackground';
+import { RESEARCH_AREAS, PUBLICATIONS } from '../data/professorData';
 import { 
   ShieldCheck, 
   Boxes, 
@@ -12,10 +15,8 @@ import {
   ArrowUpRight, 
   CheckCircle2, 
   BookOpen, 
-  GraduationCap,
-  FileText
+  GraduationCap
 } from 'lucide-react';
-import { ResearchDomain } from '../types';
 
 export function ResearchPage() {
   const [selectedDomain, setSelectedDomain] = useState<string>('all');
@@ -93,7 +94,7 @@ export function ResearchPage() {
     : RESEARCH_AREAS.filter(a => a.id === selectedDomain);
 
   return (
-    <div className="bg-[#FBFBF9]">
+    <PageTransition className="bg-[#FBFBF9] min-h-screen relative overflow-hidden">
       <PageHeader
         category="Scholarly Focus"
         title="Research Domains & Programs"
@@ -103,62 +104,71 @@ export function ResearchPage() {
       />
 
       {/* Main Research Container */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12 space-y-10 sm:space-y-12">
         {/* Ph.D. Dissertation Context Banner */}
-        <div className="bg-white rounded-lg border border-[#CBD5E1] p-6 sm:p-8 shadow-xs">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#E2E8F0] pb-5">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-lg bg-[#0F2942] text-amber-300 flex items-center justify-center font-bold">
-                <GraduationCap className="w-6 h-6" />
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+          className="relative bg-white rounded-lg border border-[#CBD5E1] p-5 sm:p-8 shadow-xs overflow-hidden"
+        >
+          <ResearchNetworkBackground className="opacity-40" />
+
+          <div className="relative z-10">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#E2E8F0] pb-5">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 rounded-lg bg-[#0F2942] text-amber-300 flex items-center justify-center font-bold shrink-0">
+                  <GraduationCap className="w-6 h-6" />
+                </div>
+                <div>
+                  <span className="text-xs uppercase font-bold tracking-widest text-[#0F2942]">
+                    Doctoral Research Program
+                  </span>
+                  <h2 className="text-lg sm:text-xl font-bold text-[#0F2942] text-break-academic">
+                    Ph.D. in Computer Science & Engineering (Pursuing)
+                  </h2>
+                </div>
               </div>
-              <div>
-                <span className="text-xs uppercase font-bold tracking-widest text-[#0F2942]">
-                  Doctoral Research Program
-                </span>
-                <h2 className="text-lg sm:text-xl font-bold text-[#0F2942]">
-                  Ph.D. in Computer Science & Engineering (Pursuing)
-                </h2>
+
+              <div className="text-xs text-[#64748B] flex flex-wrap items-center gap-2">
+                <span>Supervision: Dr. Anand Singh Rajawat</span>
+                <span>•</span>
+                <span className="font-semibold text-emerald-700">Active Doctoral Candidacy</span>
               </div>
             </div>
 
-            <div className="text-xs text-[#64748B] flex items-center gap-2">
-              <span>Supervision: Dr. Anand Singh Rajawat</span>
-              <span>•</span>
-              <span className="font-semibold text-emerald-700">Active Doctoral Candidacy</span>
+            <div className="mt-5 grid grid-cols-1 md:grid-cols-3 gap-4 text-xs sm:text-sm text-[#334155]">
+              <div className="p-3.5 bg-[#F8FAFC]/90 backdrop-blur-xs rounded-md border border-[#E2E8F0]">
+                <div className="font-bold text-[#0F2942] mb-1">Doctoral Title / Focus</div>
+                <p className="text-xs text-[#475569] leading-relaxed">
+                  Post-Quantum Cryptographic Approaches for Secure Fine-Grained Access Control in Distributed Multi-Cloud Systems & Critical Infrastructure.
+                </p>
+              </div>
+
+              <div className="p-3.5 bg-[#F8FAFC]/90 backdrop-blur-xs rounded-md border border-[#E2E8F0]">
+                <div className="font-bold text-[#0F2942] mb-1">Key Scientific Contributions</div>
+                <p className="text-xs text-[#475569] leading-relaxed">
+                  Hybrid lattice-based attribute encryption, anti-quantum digital signatures for Electronic Health Records, and consortium blockchain protection for smart energy grids.
+                </p>
+              </div>
+
+              <div className="p-3.5 bg-[#F8FAFC]/90 backdrop-blur-xs rounded-md border border-[#E2E8F0]">
+                <div className="font-bold text-[#0F2942] mb-1">Scholarly Output</div>
+                <p className="text-xs text-[#475569] leading-relaxed">
+                  Published across IJCISIM, IJISAE, JETIR, IET symposiums, alongside an authored textbook on smart city blockchain computing.
+                </p>
+              </div>
             </div>
           </div>
-
-          <div className="mt-5 grid grid-cols-1 md:grid-cols-3 gap-4 text-xs sm:text-sm text-[#334155]">
-            <div className="p-3.5 bg-[#F8FAFC] rounded-md border border-[#E2E8F0]">
-              <div className="font-bold text-[#0F2942] mb-1">Doctoral Title / Focus</div>
-              <p className="text-xs text-[#475569] leading-relaxed">
-                Post-Quantum Cryptographic Approaches for Secure Fine-Grained Access Control in Distributed Multi-Cloud Systems & Critical Infrastructure.
-              </p>
-            </div>
-
-            <div className="p-3.5 bg-[#F8FAFC] rounded-md border border-[#E2E8F0]">
-              <div className="font-bold text-[#0F2942] mb-1">Key Scientific Contributions</div>
-              <p className="text-xs text-[#475569] leading-relaxed">
-                Hybrid lattice-based attribute encryption, anti-quantum digital signatures for Electronic Health Records, and consortium blockchain protection for smart energy grids.
-              </p>
-            </div>
-
-            <div className="p-3.5 bg-[#F8FAFC] rounded-md border border-[#E2E8F0]">
-              <div className="font-bold text-[#0F2942] mb-1">Scholarly Output</div>
-              <p className="text-xs text-[#475569] leading-relaxed">
-                Published across IJCISIM, IJISAE, JETIR, IET symposiums, alongside an authored textbook on smart city blockchain computing.
-              </p>
-            </div>
-          </div>
-        </div>
+        </motion.div>
 
         {/* Filter Tabs for Research Domains */}
         <div className="flex flex-wrap items-center gap-2 pb-2 border-b border-[#E2E8F0]">
           <button
             onClick={() => setSelectedDomain('all')}
-            className={`px-3 py-1.5 text-xs font-semibold rounded-md transition-colors cursor-pointer ${
+            className={`px-3 py-1.5 text-xs font-semibold rounded-md transition-colors cursor-pointer min-h-[36px] ${
               selectedDomain === 'all'
-                ? 'bg-[#0F2942] text-white'
+                ? 'bg-[#0F2942] text-white shadow-2xs'
                 : 'bg-white border border-[#CBD5E1] text-[#475569] hover:text-[#0F2942]'
             }`}
           >
@@ -168,9 +178,9 @@ export function ResearchPage() {
             <button
               key={area.id}
               onClick={() => setSelectedDomain(area.id)}
-              className={`px-3 py-1.5 text-xs font-semibold rounded-md transition-colors cursor-pointer ${
+              className={`px-3 py-1.5 text-xs font-semibold rounded-md transition-colors cursor-pointer min-h-[36px] ${
                 selectedDomain === area.id
-                  ? 'bg-[#0F2942] text-white'
+                  ? 'bg-[#0F2942] text-white shadow-2xs'
                   : 'bg-white border border-[#CBD5E1] text-[#475569] hover:text-[#0F2942]'
               }`}
             >
@@ -180,116 +190,131 @@ export function ResearchPage() {
         </div>
 
         {/* Deep Dive Section for Selected Areas */}
-        <div className="space-y-10">
-          {filteredAreas.map((area) => {
-            const extra = domainDescriptions[area.id] || {
-              problemStatement: area.description,
-              methodologies: area.keyTopics,
-              phdConnection: 'Active research track at LoGMIEER.',
-            };
+        <div className="space-y-8 sm:space-y-10">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={selectedDomain}
+              initial={{ opacity: 0.7 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0.7 }}
+              transition={{ duration: 0.2 }}
+              className="space-y-8"
+            >
+              {filteredAreas.map((area, idx) => {
+                const extra = domainDescriptions[area.id] || {
+                  problemStatement: area.description,
+                  methodologies: area.keyTopics,
+                  phdConnection: 'Active research track at LoGMIEER.',
+                };
 
-            const relatedPubs = PUBLICATIONS.filter(p => p.domain === area.domain);
+                const relatedPubs = PUBLICATIONS.filter(p => p.domain === area.domain);
 
-            return (
-              <div
-                key={area.id}
-                className="bg-white rounded-lg border border-[#E2E8F0] p-6 sm:p-8 shadow-2xs space-y-6"
-              >
-                {/* Header Row */}
-                <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 border-b border-[#F1F5F9] pb-4">
-                  <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-lg bg-[#F1F5F9] border border-[#E2E8F0] flex items-center justify-center shrink-0">
-                      {getIcon(area.icon)}
-                    </div>
-                    <div>
-                      <div className="text-xs uppercase tracking-wider font-semibold text-[#64748B]">
-                        Domain Category: {area.domain}
-                      </div>
-                      <h3 className="font-serif-academic text-xl sm:text-2xl font-bold text-[#0F2942] mt-0.5">
-                        {area.title}
-                      </h3>
-                    </div>
-                  </div>
-
-                  <Link
-                    to="/publications"
-                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#0F2942] bg-[#F1F5F9] hover:bg-[#E2E8F0] px-3 py-1.5 rounded-md transition-colors shrink-0 self-start"
+                return (
+                  <motion.div
+                    key={area.id}
+                    initial={{ opacity: 0, y: 16 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, amount: 0.15 }}
+                    transition={{ duration: 0.35, delay: Math.min(idx * 0.06, 0.25) }}
+                    className="bg-white rounded-lg border border-[#E2E8F0] p-5 sm:p-8 shadow-2xs space-y-6 card-academic-interactive"
                   >
-                    <BookOpen className="w-3.5 h-3.5" />
-                    <span>View Papers ({relatedPubs.length})</span>
-                  </Link>
-                </div>
-
-                {/* Problem Statement & Overview */}
-                <div className="space-y-2">
-                  <h4 className="text-xs uppercase font-bold tracking-wider text-[#0F2942]">
-                    Theoretical Problem Statement & Context
-                  </h4>
-                  <p className="text-xs sm:text-sm text-[#334155] leading-relaxed">
-                    {extra.problemStatement}
-                  </p>
-                </div>
-
-                {/* Methodologies & Investigative Techniques */}
-                <div className="space-y-3">
-                  <h4 className="text-xs uppercase font-bold tracking-wider text-[#0F2942]">
-                    Key Methodologies & Analytical Techniques
-                  </h4>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-[#334155]">
-                    {extra.methodologies.map((m, idx) => (
-                      <div key={idx} className="flex items-start gap-2 p-2 rounded-md bg-[#F8FAFC] border border-[#E2E8F0]">
-                        <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                        <span>{m}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Ph.D. Scope & Pedagogical Impact */}
-                <div className="p-4 rounded-md bg-[#FAF8F5] border border-[#E7E2D8] text-xs text-[#52525B]">
-                  <strong className="text-[#0F2942] block mb-0.5">
-                    Scholarly Rationale & Progress:
-                  </strong>
-                  <span>{extra.phdConnection}</span>
-                </div>
-
-                {/* Related Papers Strip */}
-                {relatedPubs.length > 0 && (
-                  <div className="pt-2">
-                    <h4 className="text-xs uppercase font-bold tracking-wider text-[#0F2942] mb-3">
-                      Selected Papers in this Domain
-                    </h4>
-                    <div className="space-y-2 text-xs">
-                      {relatedPubs.map((pub) => (
-                        <div
-                          key={pub.id}
-                          className="p-3 rounded-md bg-[#F8FAFC] border border-[#E2E8F0] flex flex-col sm:flex-row sm:items-center justify-between gap-2"
-                        >
-                          <div>
-                            <span className="font-semibold text-[#0F2942]">"{pub.title}"</span>
-                            <div className="text-[#64748B] text-[11px] mt-0.5">
-                              {pub.venue} ({pub.year}) • {pub.type}
-                            </div>
-                          </div>
-                          <a
-                            href={pub.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1 text-xs font-semibold text-[#0F2942] hover:underline shrink-0"
-                          >
-                            <span>External Record</span>
-                            <ArrowUpRight className="w-3 h-3" />
-                          </a>
+                    {/* Header Row */}
+                    <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 border-b border-[#F1F5F9] pb-4">
+                      <div className="flex items-start gap-4">
+                        <div className="w-12 h-12 rounded-lg bg-[#F1F5F9] border border-[#E2E8F0] flex items-center justify-center shrink-0">
+                          {getIcon(area.icon)}
                         </div>
-                      ))}
+                        <div>
+                          <div className="text-xs uppercase tracking-wider font-semibold text-[#64748B]">
+                            Domain Category: {area.domain}
+                          </div>
+                          <h3 className="font-serif-academic text-xl sm:text-2xl font-bold text-[#0F2942] mt-0.5 text-break-academic">
+                            {area.title}
+                          </h3>
+                        </div>
+                      </div>
+
+                      <Link
+                        to="/publications"
+                        className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#0F2942] bg-[#F1F5F9] hover:bg-[#E2E8F0] px-3.5 py-2 rounded-md transition-all shrink-0 self-start min-h-[36px] hover:-translate-y-0.5 active:translate-y-0"
+                      >
+                        <BookOpen className="w-3.5 h-3.5" />
+                        <span>View Papers ({relatedPubs.length})</span>
+                      </Link>
                     </div>
-                  </div>
-                )}
-              </div>
-            );
-          })}
+
+                    {/* Problem Statement & Overview */}
+                    <div className="space-y-2">
+                      <h4 className="text-xs uppercase font-bold tracking-wider text-[#0F2942]">
+                        Theoretical Problem Statement & Context
+                      </h4>
+                      <p className="text-xs sm:text-sm text-[#334155] leading-relaxed">
+                        {extra.problemStatement}
+                      </p>
+                    </div>
+
+                    {/* Methodologies & Investigative Techniques */}
+                    <div className="space-y-3">
+                      <h4 className="text-xs uppercase font-bold tracking-wider text-[#0F2942]">
+                        Key Methodologies & Analytical Techniques
+                      </h4>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-[#334155]">
+                        {extra.methodologies.map((m, mIdx) => (
+                          <div key={mIdx} className="flex items-start gap-2 p-2.5 rounded-md bg-[#F8FAFC] border border-[#E2E8F0]">
+                            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                            <span>{m}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Ph.D. Scope & Pedagogical Impact */}
+                    <div className="p-4 rounded-md bg-[#FAF8F5] border border-[#E7E2D8] text-xs text-[#52525B]">
+                      <strong className="text-[#0F2942] block mb-0.5">
+                        Scholarly Rationale & Progress:
+                      </strong>
+                      <span>{extra.phdConnection}</span>
+                    </div>
+
+                    {/* Related Papers Strip */}
+                    {relatedPubs.length > 0 && (
+                      <div className="pt-2">
+                        <h4 className="text-xs uppercase font-bold tracking-wider text-[#0F2942] mb-3">
+                          Selected Papers in this Domain
+                        </h4>
+                        <div className="space-y-2 text-xs">
+                          {relatedPubs.map((pub) => (
+                            <div
+                              key={pub.id}
+                              className="p-3 rounded-md bg-[#F8FAFC] border border-[#E2E8F0] flex flex-col sm:flex-row sm:items-center justify-between gap-2 transition-colors hover:border-[#CBD5E1]"
+                            >
+                              <div className="min-w-0 flex-1">
+                                <span className="font-semibold text-[#0F2942] text-break-academic block">"{pub.title}"</span>
+                                <div className="text-[#64748B] text-[11px] mt-0.5">
+                                  {pub.venue} ({pub.year}) • {pub.type}
+                                </div>
+                              </div>
+                              <a
+                                href={pub.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-1 text-xs font-semibold text-[#0F2942] hover:underline shrink-0 min-h-[32px]"
+                              >
+                                <span>External Record</span>
+                                <ArrowUpRight className="w-3 h-3" />
+                              </a>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </motion.div>
+                );
+              })}
+            </motion.div>
+          </AnimatePresence>
         </div>
       </div>
-    </div>
+    </PageTransition>
   );
 }

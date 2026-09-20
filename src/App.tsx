@@ -2,6 +2,8 @@ import { HashRouter, Routes, Route } from 'react-router-dom';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import { ScrollToTop } from './components/ScrollToTop';
+import { ScrollProgress } from './components/ScrollProgress';
+import { BackToTop } from './components/BackToTop';
 
 import { HomePage } from './pages/HomePage';
 import { ResearchPage } from './pages/ResearchPage';
@@ -18,12 +20,13 @@ export default function App() {
   return (
     <HashRouter>
       <ScrollToTop />
+      <ScrollProgress />
       <div className="min-h-screen bg-[#FBFBF9] text-[#1E252B] flex flex-col font-sans selection:bg-[#0F2942] selection:text-white">
         {/* Persistent Academic Navigation */}
         <Navbar />
 
         {/* Dynamic Route Content */}
-        <main className="flex-1">
+        <main className="flex-1 overflow-x-hidden">
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/research" element={<ResearchPage />} />
@@ -38,6 +41,9 @@ export default function App() {
             <Route path="*" element={<HomePage />} />
           </Routes>
         </main>
+
+        {/* Floating Back to Top Control */}
+        <BackToTop />
 
         {/* Persistent Academic Footer */}
         <Footer />

@@ -1,3 +1,4 @@
+import { motion } from 'motion/react';
 import { RESEARCH_AREAS } from '../data/professorData';
 import { ResearchDomain } from '../types';
 import { 
@@ -18,47 +19,57 @@ export function ResearchInterests({ onSelectDomain }: ResearchInterestsProps) {
   const getIcon = (iconName: string) => {
     switch (iconName) {
       case 'ShieldCheck':
-        return <ShieldCheck className="w-5 h-5 text-[#0F2942]" />;
+        return <ShieldCheck className="w-5 h-5 text-[#0F2942] group-hover:-translate-y-0.5 transition-transform" />;
       case 'Boxes':
-        return <Boxes className="w-5 h-5 text-[#0F2942]" />;
+        return <Boxes className="w-5 h-5 text-[#0F2942] group-hover:-translate-y-0.5 transition-transform" />;
       case 'Cpu':
-        return <Cpu className="w-5 h-5 text-[#0F2942]" />;
+        return <Cpu className="w-5 h-5 text-[#0F2942] group-hover:-translate-y-0.5 transition-transform" />;
       case 'Terminal':
-        return <Terminal className="w-5 h-5 text-[#0F2942]" />;
+        return <Terminal className="w-5 h-5 text-[#0F2942] group-hover:-translate-y-0.5 transition-transform" />;
       case 'Network':
-        return <Network className="w-5 h-5 text-[#0F2942]" />;
+        return <Network className="w-5 h-5 text-[#0F2942] group-hover:-translate-y-0.5 transition-transform" />;
       default:
-        return <Sparkles className="w-5 h-5 text-[#0F2942]" />;
+        return <Sparkles className="w-5 h-5 text-[#0F2942] group-hover:-translate-y-0.5 transition-transform" />;
     }
   };
 
   return (
-    <section id="research" className="py-14 sm:py-16 border-b border-[#E3E3DC] bg-[#F7F7F4]">
+    <section id="research" className="py-12 sm:py-16 border-b border-[#E3E3DC] bg-[#F7F7F4] overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+        <motion.div
+          initial={{ opacity: 0, y: 14 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+          className="flex flex-col md:flex-row md:items-end justify-between mb-8 sm:mb-10 gap-4"
+        >
           <div>
             <div className="text-xs uppercase tracking-widest font-semibold text-[#0F2942]">
               Academic Inquiry & Focus Areas
             </div>
-            <h2 className="font-serif-academic text-2xl sm:text-3xl lg:text-4xl text-[#0F2942] mt-1">
+            <h2 className="font-serif-academic text-2xl sm:text-3xl lg:text-4xl text-[#0F2942] mt-1 text-break-academic">
               Research Specializations
             </h2>
             <p className="mt-2 text-sm sm:text-base text-[#52525B] max-w-2xl leading-relaxed">
               Advancing cryptographic resilience against quantum computation, architecting tamper-evident smart systems for healthcare and electrical grids, and pioneering applied machine learning for cyber threat intelligence.
             </p>
           </div>
-        </div>
+        </motion.div>
 
         {/* Research Area Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {RESEARCH_AREAS.map((area) => (
-            <div
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+          {RESEARCH_AREAS.map((area, idx) => (
+            <motion.div
               key={area.id}
-              className="bg-white rounded-lg border border-[#E2E8F0] p-6 shadow-2xs hover:shadow-sm hover:border-[#CBD5E1] transition-all flex flex-col justify-between"
+              initial={{ opacity: 0, y: 18 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.15 }}
+              transition={{ duration: 0.35, delay: idx * 0.06, ease: [0.16, 1, 0.3, 1] }}
+              className="bg-white rounded-lg border border-[#E2E8F0] p-5 sm:p-6 shadow-2xs hover:shadow-sm hover:border-[#CBD5E1] transition-all flex flex-col justify-between group card-academic-interactive"
             >
               <div>
-                <div className="w-10 h-10 rounded-md bg-[#F1F5F9] border border-[#E2E8F0] flex items-center justify-center mb-4">
+                <div className="w-10 h-10 rounded-md bg-[#F1F5F9] border border-[#E2E8F0] flex items-center justify-center mb-4 transition-colors group-hover:bg-[#E2E8F0]">
                   {getIcon(area.icon)}
                 </div>
 
@@ -92,13 +103,13 @@ export function ResearchInterests({ onSelectDomain }: ResearchInterestsProps) {
                       pubSection.scrollIntoView({ behavior: 'smooth' });
                     }
                   }}
-                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#0F2942] hover:text-[#1E40AF] transition-colors cursor-pointer group"
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#0F2942] hover:text-[#1A3E61] transition-colors cursor-pointer group/btn min-h-[36px]"
                 >
                   <span>Explore related publications</span>
-                  <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-1.5 transition-transform" />
                 </button>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>

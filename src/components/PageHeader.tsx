@@ -14,21 +14,21 @@ export function PageHeader({ category, title, description, breadcrumb, badge }: 
     <div className="bg-[#F4F4F0] border-b border-[#E3E3DC] py-10 sm:py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Breadcrumbs */}
-        <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs text-[#64748B] mb-4">
+        <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-1.5 text-xs text-[#64748B] mb-4">
           <Link
             to="/"
-            className="flex items-center gap-1 hover:text-[#0F2942] transition-colors"
+            className="flex items-center gap-1 hover:text-[#0F2942] transition-colors shrink-0"
           >
             <Home className="w-3.5 h-3.5" />
             <span>Home</span>
           </Link>
-          <ChevronRight className="w-3 h-3 text-[#94A3B8]" />
-          <span className="font-semibold text-[#0F2942]">{breadcrumb}</span>
+          <ChevronRight className="w-3 h-3 text-[#94A3B8] shrink-0" />
+          <span className="font-semibold text-[#0F2942] break-words">{breadcrumb}</span>
         </nav>
 
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               <span className="text-xs uppercase tracking-widest font-semibold text-[#0F2942]">
                 {category}
               </span>
@@ -38,10 +38,10 @@ export function PageHeader({ category, title, description, breadcrumb, badge }: 
                 </span>
               )}
             </div>
-            <h1 className="font-serif-academic text-2xl sm:text-3xl lg:text-4xl text-[#0F2942] mt-1.5 font-normal tracking-tight">
+            <h1 className="font-serif-academic text-2xl sm:text-3xl lg:text-4xl text-[#0F2942] mt-1.5 font-normal tracking-tight break-words">
               {title}
             </h1>
-            <p className="mt-2 text-sm sm:text-base text-[#52525B] max-w-3xl leading-relaxed">
+            <p className="mt-2 text-sm sm:text-base text-[#52525B] max-w-3xl leading-relaxed break-words">
               {description}
             </p>
           </div>

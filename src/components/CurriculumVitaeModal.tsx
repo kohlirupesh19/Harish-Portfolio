@@ -56,7 +56,7 @@ export function CurriculumVitaeModal({ isOpen, onClose }: CurriculumVitaeModalPr
                 <img
                   src={professorPortrait}
                   alt="Prof. Harish Parshuram Bhabad"
-                  className="w-16 sm:w-20 h-auto aspect-[865/1024] object-cover rounded-md border border-[#CBD5E1] shadow-2xs shrink-0"
+                  className="w-16 sm:w-20 h-auto aspect-[864/1024] object-cover rounded-md border border-[#CBD5E1] shadow-2xs shrink-0"
                   referrerPolicy="no-referrer"
                 />
                 <div>
