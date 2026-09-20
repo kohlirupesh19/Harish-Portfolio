@@ -1,0 +1,29 @@
+@import "tailwindcss";
+
+:root {
+  --font-serif: 'Instrument Serif', Georgia, Cambria, serif;
+  --font-display: 'Cinzel', 'Times New Roman', serif;
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+}
+
+.font-serif-academic {
+  font-family: var(--font-serif);
+}
+
+.font-display-academic {
+  font-family: var(--font-display);
+}
+
+.font-sans-academic {
+  font-family: var(--font-sans);
+}
+
+@media print {
+  header, nav, footer, .no-print {
+    display: none !important;
+  }
+  body {
+    background: white !important;
+    color: black !important;
+  }
+}
